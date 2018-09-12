@@ -15,8 +15,8 @@ var config = {
     address: '3Jcz4rj98NUQAgEr3BVXaEvrSBVQ8eHb3F4',
     startBlockHeight: 149634,
     endBlock: 199654,
-    distributableMrtPerBlock: 20,
-    filename: 'test.json',
+    distributableMrtPerBlock: 10,
+    filename: 'payment.json',
     node: 'http://173.249.45.183:6861',
     percentageOfFeesToDistribute: 90
 };
