@@ -8,7 +8,7 @@ var request = require('request');
  */
 var config = {
     filename: 'test.json',
-    node: 'http://5.189.136.6:6869'
+    node: 'http://173.249.45.183:6861'
 };
 
 var payments;
@@ -36,16 +36,16 @@ var start = function() {
                 assets[payment.assetId].amount += payment.amount;
             }
         } else {
-            if (!assets['Waves']) {
+            if (!assets['TN']) {
                 assetsFound++;
-                assets['Waves'] = {
+                assets['TN'] = {
                     amount: payment.amount,
                     decimals: 8,
-                    name: 'Waves'
+                    name: 'TN'
                 };
 
             } else {
-                assets['Waves'].amount += payment.amount;
+                assets['TN'].amount += payment.amount;
             }
         }
     });
@@ -68,7 +68,7 @@ var addAssetInfo = function(assets, cb) {
     var counter = 0;
 
     for (var assetId in assets) {
-        if (assetId !== 'Waves') {
+        if (assetId !== 'TN') {
             request.get(config.node + '/transactions/info/' + assetId, function(err, response, body) {
                 if (!err) {
                     var asset = JSON.parse(body);
