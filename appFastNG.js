@@ -99,7 +99,7 @@ var prepareDataStructure = function(blocks) {
 
         block.transactions.forEach(function(transaction) {
             // type 8 are leasing tx
-            if (transaction.type === 8 && (transaction.recipient === config.address || transaction.recipient === "address:" + config.address || transaction.recipient === 'alias:W:' + config.alias)) {
+            if (transaction.type === 8 && (transaction.recipient === config.address || transaction.recipient === "address:" + config.address || transaction.recipient === 'alias:L:' + config.alias)) {
                 transaction.block = block.height;
                 myLeases[transaction.id] = transaction;
             } else if (transaction.type === 9 && myLeases[transaction.leaseId]) { // checking for lease cancel tx
