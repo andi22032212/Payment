@@ -16,8 +16,8 @@ var fs = require('fs');
  *     - blockStorage: file for storing block history
  */
 var config = {
-    address: '',
-    alias: '',
+    address: '3Jcz4rj98NUQAgEr3BVXaEvrSBVQ8eHb3F4',
+    alias: 'natapoints',
     startBlockHeight: 149634,
     endBlock: 199654,
     distributableNATAPerBlock: 10,
