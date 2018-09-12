@@ -11,10 +11,10 @@ var request = require('request');
  */
 var config = {
     filename: '<your payments file>',
-    node: 'http://<ip>:<port>',
-    apiKey: 'put the apiKey for the node here',
-    feeAssetId: null,
-    fee: 10000
+    node: 'http://173.249.45.183:6861',
+    apiKey: 'apiKey',
+    feeAssetId: '79jWQxTiV925jubY2c48vwJqVN2z1hU3rXX8uqdhuQnY',
+    fee: 5
 };
 
 /**
