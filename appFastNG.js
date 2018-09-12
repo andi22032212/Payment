@@ -21,7 +21,7 @@ var config = {
     startBlockHeight: 149634,
     endBlock: 199654,
     distributableNATAPerBlock: 10,
-    filename: 'test.json',
+    filename: 'payment.json',
     node: 'http://173.249.45.183:6861',
     percentageOfFeesToDistribute: 90,
     blockStorage: 'blocks.json'
@@ -248,7 +248,6 @@ var pay = function() {
             transactions.push({
                 "amount": Number(Math.round(nata[address] * Math.pow(10, 2))),
                 "fee": 2000000,
-                "feeAssetId": "79jWQxTiV925jubY2c48vwJqVN2z1hU3rXX8uqdhuQnY",
                 "sender": config.address,
                 "attachment": "NpLmsir2hcRAdcRS9EsZUA9HA1rdbz",
                 "recipient": address
