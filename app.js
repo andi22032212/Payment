@@ -12,13 +12,13 @@ var fs = require('fs');
   *     - percentageOfFeesToDistribute: the percentage of Waves fees that you want to distribute
  */
 var config = {
-    address: '',
-    startBlockHeight: 462000,
-    endBlock: 465000,
+    address: '3Jcz4rj98NUQAgEr3BVXaEvrSBVQ8eHb3F4',
+    startBlockHeight: 149634,
+    endBlock: 199654,
     distributableMrtPerBlock: 20,
     filename: 'test.json',
-    node: 'http://<ip>:6869',
-    percentageOfFeesToDistribute: 100
+    node: 'http://173.249.45.183:6861',
+    percentageOfFeesToDistribute: 90
 };
 
 var payments = [];
@@ -170,19 +170,19 @@ var pay = function() {
         if (payment > 0) {
             transactions.push({
                 "amount": Number(Math.round(payments[address] - 200000)),
-                "fee": 100000,
+                "fee": 2000000,
                 "sender": config.address,
-                "attachment": "",
+                "attachment": "NpLmsir2hcRAdcRS9EsZUA9HA1rdbz",
                 "recipient": address
             });
         }
         if (mrt[address] > 0) {
             transactions.push({
                 "amount": Number(Math.round(mrt[address] * Math.pow(10, 2))),
-                "fee": 100000,
-                "assetId": "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
+                "fee": 200000,
+                "assetId": "79jWQxTiV925jubY2c48vwJqVN2z1hU3rXX8uqdhuQnY",
                 "sender": config.address,
-                "attachment": "",
+                "attachment": "NpLmsir2hcRAdcRS9EsZUA9HA1rdbz",
                 "recipient": address
             });
         }
