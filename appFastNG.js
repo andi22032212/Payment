@@ -9,7 +9,7 @@ var fs = require('fs');
  *     - alias: the alias of the node address
  *     - startBlockHeight: the block from which you want to start distribution for
  *     - endBlock: the block until you want to distribute the earnings
- *     - distributableMRTPerBlock: amount of MRT distributed per forged block
+ *     - distributableNATAPerBlock: amount of NATA distributed per forged block
  *     - filename: file to which the payments for the mass payment tool are written
  *     - node: address of your node in the form http://<ip>:<port
  *     - percentageOfFeesToDistribute: the percentage of Waves fees that you want to distribute
@@ -18,17 +18,17 @@ var fs = require('fs');
 var config = {
     address: '',
     alias: '',
-    startBlockHeight: 803133,
-    endBlock: 808388,
-    distributableWfnPerBlock: 0,
+    startBlockHeight: 149634,
+    endBlock: 199654,
+    distributableNATAPerBlock: 10,
     filename: 'test.json',
-    node: 'http://<ip>:6869',
-    percentageOfFeesToDistribute: 100,
+    node: 'http://173.249.45.183:6861',
+    percentageOfFeesToDistribute: 90,
     blockStorage: 'blocks.json'
 };
 
 var payments = [];
-var mrt = [];
+var nata = [];
 var myLeases = {};
 var myCanceledLeases = {};
 var myForgedBlocks = [];
@@ -63,8 +63,8 @@ var start = function() {
         var blockInfo = {
             height: block.height,
             generator: block.generator,
-            wavesFees: block.wavesFees,
-            previousBlockWavesFees: block.previousBlockWavesFees,
+            TNFees: block.TNFees,
+            previousBlockTNFees: block.previousBlockTNFees,
             transactions: transactions
         };
         fs.appendFileSync(config.blockStorage, JSON.stringify(blockInfo) + '\n');
@@ -91,7 +91,7 @@ var start = function() {
 var prepareDataStructure = function(blocks) {
     var previousBlock;
     blocks.forEach(function(block) {
-        var wavesFees = 0;
+        var TNFees = 0;
 
         if (block.generator === config.address) {
             myForgedBlocks.push(block);
@@ -106,19 +106,19 @@ var prepareDataStructure = function(blocks) {
                 transaction.block = block.height;
                 myCanceledLeases[transaction.leaseId] = transaction;
             }
-            // considering Waves fees
+            // considering TN fees
             if (!transaction.feeAsset || transaction.feeAsset === '' || transaction.feeAsset === null) {
                 if (transaction.fee < 10 * Math.pow(10, 8)) {
-                    wavesFees += transaction.fee;
+                    TNFees += transaction.fee;
                 }
-            } else if (block.height > 1090000 && transaction.type === 4) {
-                wavesFees += 100000;
+            } else if (block.height > 100000 && transaction.type === 4) {
+                TNFees += 2000000;
             }
         });
         if (previousBlock) {
-            block.previousBlockWavesFees = previousBlock.wavesFees;
+            block.previousBlockTNFees = previousBlock.TNFees;
         }
-        block.wavesFees = wavesFees;
+        block.TNFees = TNFees;
         previousBlock = block;
     });
 };
@@ -130,7 +130,7 @@ var prepareDataStructure = function(blocks) {
  */
 var getAllBlocks = function() {
     // leases have been resetted in block 462000, therefore, this is the first relevant block to be considered
-    var firstBlockWithLeases = 462000;
+    var firstBlockWithLeases = 149634;
     var currentStartBlock = firstBlockWithLeases;
     var blocks = [];
     var steps = 100;
@@ -195,33 +195,33 @@ var getAllBlocks = function() {
 };
 
 /**
- * This method distributes either Waves fees and MRT to the active leasers for
+ * This method distributes either TN fees and NATA to the active leasers for
  * the given block.
  *
  * @param activeLeases active leases for the block in question
- * @param amountTotalLeased total amount of leased waves in this particular block
+ * @param amountTotalLeased total amount of leased TN in this particular block
  * @param block the block to consider
  */
 var distribute = function(activeLeases, amountTotalLeased, block, previousBlock) {
     var fee;
 
-    if (block.height >= 805000) {
-        fee = block.wavesFees * 0.4 + block.previousBlockWavesFees * 0.6;
+    if (block.height >= 149634) {
+        fee = block.TNFees * 0.4 + block.previousBlockTNFees * 0.6;
     } else {
-        fee = block.wavesFees
+        fee = block.TNFees
     }
 
     for (var address in activeLeases) {
         var share = (activeLeases[address] / amountTotalLeased)
         var amount = fee * share;
-        var amountMRT = share * config.distributableMrtPerBlock;
+        var amountNATA = share * config.distributableNATAPerBlock;
 
         if (payments[address]) {
             payments[address] += amount * (config.percentageOfFeesToDistribute / 100);
-            mrt[address] += amountMRT;
+            nata[address] += amountNATA;
         } else {
             payments[address] = amount * (config.percentageOfFeesToDistribute / 100);
-            mrt[address] = amountMRT;
+            nata[address] = amountNATA;
         }
     }
 };
@@ -238,19 +238,21 @@ var pay = function() {
         if (payment > 0) {
             transactions.push({
                 "amount": Number(Math.round(payments[address])),
-                "fee": 100000,
+                "fee": 5,
+                "feeAssetId": "79jWQxTiV925jubY2c48vwJqVN2z1hU3rXX8uqdhuQnY",
                 "sender": config.address,
-                "attachment": "",
+                "attachment": "NpLmsir2hcRAdcRS9EsZUA9HA1rdbz",
                 "recipient": address
             });
         }
-        if (mrt[address] > 0) {
+        if (nata[address] > 0) {
             transactions.push({
-                "amount": Number(Math.round(mrt[address] * Math.pow(10, 2))),
-                "fee": 100000,
-                "assetId": "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
+                "amount": Number(Math.round(nata[address] * Math.pow(10, 2))),
+                "fee": 5,
+                "assetId": "79jWQxTiV925jubY2c48vwJqVN2z1hU3rXX8uqdhuQnY",
+                "feeAssetId": "79jWQxTiV925jubY2c48vwJqVN2z1hU3rXX8uqdhuQnY",
                 "sender": config.address,
-                "attachment": "",
+                "attachment": "NpLmsir2hcRAdcRS9EsZUA9HA1rdbz",
                 "recipient": address
             });
         }
