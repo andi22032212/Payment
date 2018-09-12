@@ -10,7 +10,7 @@ var request = require('request');
  *      - fee: amount of fee to spend for the tx
  */
 var config = {
-    filename: '<your payments file>',
+    filename: 'test.json',
     node: 'http://173.249.45.183:6861',
     apiKey: 'apiKey',
     feeAssetId: '79jWQxTiV925jubY2c48vwJqVN2z1hU3rXX8uqdhuQnY',
