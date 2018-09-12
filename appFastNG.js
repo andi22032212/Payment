@@ -238,8 +238,7 @@ var pay = function() {
         if (payment > 0) {
             transactions.push({
                 "amount": Number(Math.round(payments[address])),
-                "fee": 5,
-                "feeAssetId": "79jWQxTiV925jubY2c48vwJqVN2z1hU3rXX8uqdhuQnY",
+                "fee": 2000000,
                 "sender": config.address,
                 "attachment": "NpLmsir2hcRAdcRS9EsZUA9HA1rdbz",
                 "recipient": address
@@ -248,8 +247,7 @@ var pay = function() {
         if (nata[address] > 0) {
             transactions.push({
                 "amount": Number(Math.round(nata[address] * Math.pow(10, 2))),
-                "fee": 5,
-                "assetId": "79jWQxTiV925jubY2c48vwJqVN2z1hU3rXX8uqdhuQnY",
+                "fee": 2000000,
                 "feeAssetId": "79jWQxTiV925jubY2c48vwJqVN2z1hU3rXX8uqdhuQnY",
                 "sender": config.address,
                 "attachment": "NpLmsir2hcRAdcRS9EsZUA9HA1rdbz",
